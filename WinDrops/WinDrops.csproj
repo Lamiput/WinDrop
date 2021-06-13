@@ -100,9 +100,17 @@
     <Compile Include="Utils\DBHandler.cs" />
     <Compile Include="ViewModel\VMDevice.cs" />
     <Compile Include="ViewModel\VMDropConfig.cs" />
+    <Compile Include="ViewModel\VMManageConfigs.cs" />
     <Compile Include="ViewModel\VMSerialCom.cs" />
+    <Compile Include="ViewModel\VMSetupController.cs" />
     <Compile Include="View\UCDevice.xaml.cs">
       <DependentUpon>UCDevice.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UCManageConfigs.xaml.cs">
+      <DependentUpon>UCManageConfigs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UCSetupController.xaml.cs">
+      <DependentUpon>UCSetupController.xaml</DependentUpon>
     </Compile>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -121,6 +129,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\UCDevice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UCManageConfigs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UCSetupController.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

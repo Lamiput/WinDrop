@@ -14,12 +14,5 @@ namespace WinDrops.View
         {
             InitializeComponent();
         }
-
-        private void ScrollToLastLine(object sender, DataTransferEventArgs e)
-        {
-            if (sender is TextBox box)
-            { box.ScrollToEnd(); }
-        }
-
     }
 }
