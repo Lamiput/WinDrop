@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="WinDrops.View.UCDevice"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WinDrops.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="150">
+
+    <Grid Background="{Binding BGBrush}" Margin="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <TextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="2,2"
+                 Text="{Binding Name}"/>
+        <Label Content="Target Pin" HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+        <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="2,2"
+                 Text="{Binding Pin}"/>
+        <Button Content="Set Duration" HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" 
+                Command="{Binding ICSetDuration}"/>
+        <TextBox Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Margin="2,2"
+                 Text="{Binding Duration}"/>
+        <DataGrid Grid.Row="4" Grid.ColumnSpan="2" Margin="2" ItemsSource="{Binding DropTasks}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Startime" Binding="{Binding StartTime}" />
+                <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="Action +" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2"
+                Command="{Binding ICAddTask}" />
+        <Button Content="Action -" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2"
+                Command="{Binding ICRemTask}" />
+        <Button Content="Set ON" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,2"/>
+        <Button Content="Set OFF" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,2"/>
+        <CheckBox Content="Mark Device" Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="2,2"
+                  IsChecked="{Binding Marked}"/>
+    </Grid>
+</UserControl>

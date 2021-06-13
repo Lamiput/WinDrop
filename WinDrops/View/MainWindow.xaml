@@ -1,0 +1,106 @@
+﻿<Window x:Class="WinDrops.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lcl="clr-namespace:WinDrops"
+        xmlns:view="clr-namespace:WinDrops.View"
+        xmlns:viewmod="clr-namespace:WinDrops.ViewModel"
+        xmlns:mod="clr-namespace:WinDrops.Model"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+        mc:Ignorable="d"
+        Title="WinDrops" Height="600" Width="800">
+
+	<Window.DataContext>
+		<viewmod:ViewModel/>
+	</Window.DataContext>
+
+	<Window.Resources>
+        <DataTemplate DataType="{x:Type viewmod:VMDevice}">
+            <view:UCDevice />
+        </DataTemplate>
+        <sys:Int32 x:Key="SpanAll">2147483647</sys:Int32>
+    </Window.Resources>
+	
+	<Grid Margin="15">
+		<Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+			<RowDefinition Height="30"/>
+		</Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Button Content="Create Valve" Grid.Column="1" Margin="2" Width="120" 
+                    Command="{Binding VmDropConfig.ICAddDevice}" CommandParameter="Valve" />
+            <Button Content="Create Flash" Grid.Column="1" Margin="2"
+                    Command="{Binding VmDropConfig.ICAddDevice}" CommandParameter="Flash" />
+            <Button Content="Create Camera" Grid.Column="1" Margin="2"
+                    Command="{Binding VmDropConfig.ICAddDevice}" CommandParameter="Camera" />
+            <Button Content="Delete sel. Devices" Grid.Column="1" Margin="2"
+				Command="{Binding VmDropConfig.ICDelSelDevices}" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Button Content="Show Info" Margin="2" Width="100"
+                    Command="{Binding VmSerialCom.ICSendCmd}" CommandParameter="Info" />
+            <Button Content="Load Tasks" Margin="2"
+                    Command="{Binding VmSerialCom.ICSetTasks}" />
+            <Button Content="Clear Tasks" Margin="2"
+                    Command="{Binding VmSerialCom.ICSendCmd}" CommandParameter="Reset" />
+        </StackPanel>
+        <Grid Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" MinWidth="70"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" MinHeight="40" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" MinHeight="35"/>
+            </Grid.RowDefinitions>
+            <Button Content="Run" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="2"
+                    Command="{Binding VmSerialCom.ICRunTasks}" />
+            <Label Content="Times" Grid.Column="0" Grid.Row="1" Margin="2"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="2" VerticalContentAlignment="Center"
+                     Text="{Binding VmSerialCom.Passes}"/>
+            <Label Content="Delay [sec]" Grid.Column="0" Grid.Row="2" Margin="2"/>
+            <TextBox Grid.Column="1" Grid.Row="2"  Margin="2" VerticalContentAlignment="Center"
+                     Text="{Binding VmSerialCom.Delay}"/>
+            <Button Content="Cancel"  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"  Margin="2"
+                    Command="{Binding VmSerialCom.ICSendCmd}" CommandParameter="Cancel" />
+        </Grid>
+        <TextBox Grid.Row="0" Grid.Column="3" VerticalScrollBarVisibility="Visible" Margin="2"
+                 AcceptsReturn="True" TextWrapping="Wrap" IsReadOnly="True" TargetUpdated="ScrollToLastLine"
+                 Text="{Binding VmSerialCom.SerialDialog, NotifyOnTargetUpdated=true}" />
+        <TextBox Grid.Row="1" Grid.ColumnSpan="{StaticResource SpanAll}" Margin="2" VerticalAlignment="Bottom"
+                 Text="{Binding VmDropConfig.Name}" />
+        <TextBox Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="2"
+                 AcceptsReturn="True" TextWrapping="Wrap"
+                 Text="{Binding VmDropConfig.Description}" />
+        <ItemsControl Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="{StaticResource SpanAll}" ItemsSource="{Binding VmDropConfig.Devices}" Margin="2,10">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal" />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</ItemsControl>
+        <Button Content="Connect" Grid.Row="3" Grid.Column="0" Margin="2"
+                Command="{Binding VmSerialCom.ICSerialOpen}"
+                CommandParameter="{Binding ElementName=cbPortName, Path=SelectedValue}"/>
+        <Button Content="Disconnect" Grid.Row="3" Grid.Column="1" Margin="2"
+                Command="{Binding VmSerialCom.ICSerialClose}"/>
+        <Button Content="Refresh COM-Ports" Grid.Row="3" Grid.Column="2" Margin="2"
+                Command="{Binding VmSerialCom.ICScanPorts}"/>
+        <ComboBox Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="{StaticResource SpanAll}" Margin="2" IsReadOnly="True"
+                  ItemsSource="{Binding VmSerialCom.PortList}"
+                  SelectedIndex="{Binding VmSerialCom.PortIdx}"
+                  x:Name="cbPortName"/>
+    </Grid>
+</Window>
