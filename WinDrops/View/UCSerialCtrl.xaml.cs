@@ -19,18 +19,23 @@
 //
 
 using System.Windows.Controls;
-
+using System.Windows.Data;
 
 namespace WinDrops.View
 {
     /// <summary>
-    /// Interaktionslogik für UCSetupController.xaml
+    /// Interaktionslogik für UCSerialCtrl.xaml
     /// </summary>
-    public partial class UCSetupController : UserControl
+    public partial class UCSerialCtrl : UserControl
     {
-        public UCSetupController()
+        public UCSerialCtrl()
         {
             InitializeComponent();
+        }
+        private void ScrollToLastLine(object sender, DataTransferEventArgs e)
+        {
+            if (sender is TextBox box)
+            { box.ScrollToEnd(); }
         }
     }
 }

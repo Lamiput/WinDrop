@@ -18,19 +18,30 @@
 //  along with WinDrop. If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System.Windows.Controls;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 
-namespace WinDrops.View
+namespace WinDrops.Utils
 {
-    /// <summary>
-    /// Interaktionslogik für UCSetupController.xaml
-    /// </summary>
-    public partial class UCSetupController : UserControl
+    public class ViewModelBase : INotifyPropertyChanged
     {
-        public UCSetupController()
+        //Interface IpropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
-            InitializeComponent();
+            if (Equals(storage, value)) return false;
+
+            storage = value;
+            this.RaisePropertyChanged(propertyName);
+            return true;
         }
+
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

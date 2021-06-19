@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lcl="clr-namespace:WinDrops"
+        xmlns:view="clr-namespace:WinDrops.View"
         xmlns:viewmod="clr-namespace:WinDrops.ViewModel"
         mc:Ignorable="d"
         Title="WinDrops" Height="600" Width="800">
@@ -13,6 +14,13 @@
     </Window.DataContext>
 
     <Grid>
-        <TabControl ItemsSource="{Binding TabItems}" />
+        <TabControl SelectedIndex="{Binding SelTabIdx}">
+            <TabItem Header="Manage Configs">
+                <view:UCManageConfigs />
+            </TabItem>
+            <TabItem Header="Setup Config">
+                <view:UCSetupController />
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

@@ -5,15 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WinDrops.View"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="150">
-
-    <Grid Background="{Binding BGBrush}" Margin="2">
+             d:DesignHeight="300" d:DesignWidth="130">
+    <UserControl.Resources>
+        <local:DevicetypeToColorConverter x:Key="DevicetypeToColorConverter" />
+    </UserControl.Resources>
+    <Grid Margin="5,2" Background="{Binding DevType, Converter={StaticResource DevicetypeToColorConverter}}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="65"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="35"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -22,28 +24,45 @@
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="2,2"
+        <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Center" Margin="2"
                  Text="{Binding Name}"/>
-        <Label Content="Target Pin" HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-        <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="2,2"
+        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+               Content="Target Pin"/>
+        <TextBox Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="2" 
                  Text="{Binding Pin}"/>
-        <Button Content="Set Duration" HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" 
-                Command="{Binding ICSetDuration}"/>
-        <TextBox Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Margin="2,2"
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"  HorizontalAlignment="Center" 
+                Content="Set Duration"
+                Command="{Binding DataContext.ICSetDuration, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                CommandParameter="{Binding}"/>
+        <TextBox Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Margin="2"
                  Text="{Binding Duration}"/>
-        <DataGrid Grid.Row="4" Grid.ColumnSpan="2" Margin="2" ItemsSource="{Binding DropTasks}" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="3" Grid.ColumnSpan="3" Margin="2"
+                  AutoGenerateColumns="False" CanUserAddRows="False"
+                  ItemsSource="{Binding DropTasks}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Startime" Binding="{Binding StartTime}" />
                 <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Action +" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2"
-                Command="{Binding ICAddTask}" />
-        <Button Content="Action -" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2"
-                Command="{Binding ICRemTask}" />
-        <Button Content="Set ON" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,2"/>
-        <Button Content="Set OFF" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,2"/>
-        <CheckBox Content="Mark Device" Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="2,2"
-                  IsChecked="{Binding Marked}"/>
+        <Button Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="2"
+                Content="Action +"
+                Command="{Binding DataContext.ICAddTask, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                CommandParameter="{Binding}"/>
+        <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="2"
+                Content="Action -"
+                Command="{Binding DataContext.ICDelTask, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                CommandParameter="{Binding}"/>
+        <Button Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="2"
+                Content="Set ON"
+                Command="{Binding DataContext.ICSetDeviceOn, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                CommandParameter="{Binding}"/>
+        <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="2"
+                Content="Set OFF"
+                Command="{Binding DataContext.ICSetDeviceOff, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                CommandParameter="{Binding}"/>
+        <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" Margin="2"
+                Content="Delete Device"
+                Command="{Binding DataContext.ICDelDevice, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                CommandParameter="{Binding}"/>
     </Grid>
 </UserControl>

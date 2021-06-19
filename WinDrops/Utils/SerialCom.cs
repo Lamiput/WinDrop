@@ -1,17 +1,35 @@
-﻿using System;
+﻿//
+//  Project: WinDrop - A GUI for ArduDrop or similar Microcontrollerprojects
+//  Copyright (C) 2021 Holger Pasligh
+//  
+//  This file is part of WinDrop.
+//  
+//  WinDrop is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  WinDrop is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with WinDrop. If not, see <http://www.gnu.org/licenses/>.
+//
+
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Threading;
+using WinDrops.Model;
 
-
-namespace WinDrops.Model
+namespace WinDrops.Utils
 {
-    public class SerialCom
+    public static class SerialCom
     {
         private const int _BaudRate = 9600;
-        private SerialPort _ComPort = new SerialPort();
-
         public enum BasicCMD
         {
             Info,
@@ -19,7 +37,9 @@ namespace WinDrops.Model
             Cancel
         }
 
-        public int OpenPort(string PortName)
+        private static SerialPort _ComPort = new SerialPort();
+
+        public static int OpenPort(string PortName)
         {
             if (!PortName.StartsWith("COM"))
                 return 1;
@@ -31,7 +51,7 @@ namespace WinDrops.Model
             return 0;
         }
 
-        public int ClosePort()
+        public static int ClosePort()
         {
             if (_ComPort.IsOpen)
                 _ComPort.Close();
@@ -39,7 +59,7 @@ namespace WinDrops.Model
         }
 
 
-        public int SendBasicCmd(BasicCMD basicCMD)
+        public static int SendBasicCmd(BasicCMD basicCMD)
         {
             switch (basicCMD)
             {
@@ -54,7 +74,17 @@ namespace WinDrops.Model
             }
         }
 
-        public int SendRunCmd(int passes = 0, int delay = 0)
+        public static int SendHighLowCmd(bool setHigh, int pin)
+        {
+            string _cmd;
+            if (pin < 0)
+            { return -1; }
+            _cmd = setHigh ? "H;" : "L;";
+            _cmd += pin.ToString() + "\n";
+            return WriteToPort(_cmd);
+        }
+
+        public static int SendRunCmd(int passes = 0, int delay = 0)
         {
             string _cmd = "R";
             if (passes > 0)
@@ -67,7 +97,7 @@ namespace WinDrops.Model
             return WriteToPort(_cmd);
         }
 
-        public int SendTaskList(Device.EDevType devType, int pin, List<DropTask> dropTasks)
+        public static int SendTaskList(Device.EDevType devType, int pin, List<DropTask> dropTasks)
         {
             if (pin < 0)
                 return 1;
@@ -107,7 +137,7 @@ namespace WinDrops.Model
             return _retval == 0 ? _retval : _retval + 10 ;
         }
 
-        private int WriteToPort(string data)
+        private static int WriteToPort(string data)
         {
             if (!_ComPort.IsOpen)
                 return 1;
@@ -119,14 +149,14 @@ namespace WinDrops.Model
             return 0;
         }
 
-        public event NewSerialReadingHandler NewSerialReading;
+        public static event NewSerialReadingHandler NewSerialReading;
         public delegate void NewSerialReadingHandler(object sender, SerialReadingEventArgs e);
 
-        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        private static void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort sp = (SerialPort)sender;
             string dataread = sp.ReadExisting();
-            NewSerialReading?.Invoke(this, new SerialReadingEventArgs(dataread));
+            NewSerialReading?.Invoke(typeof(SerialCom), new SerialReadingEventArgs(dataread));
         }
 
         public static List<string> ListSerialPorts()

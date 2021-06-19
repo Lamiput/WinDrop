@@ -17,19 +17,21 @@
             <RowDefinition Height="*" MinHeight="100" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" >
-            <Button Width="75" Content="New" Margin="2" Command="{Binding ICNewConf}" />
-            <Button Width="75" Content="Load" Margin="2" Command="{Binding ICLoadConf}" />
+            <Button Width="75" Content="Load" Margin="2"
+                    Command="{Binding ICLoadConf}"
+                    CommandParameter="{Binding ElementName=DropConfigs, Path=SelectedItem.Id}"/>
             <Button Width="75" Content="Delete" Margin="2"
                     Command="{Binding ICDeleteConf}"
-                    CommandParameter="{Binding ElementName=DropConfigs, Path=SelectedItem}"/>
+                    CommandParameter="{Binding ElementName=DropConfigs, Path=SelectedItem.Id}"/>
         </StackPanel>
         <Label Grid.Row="1" Grid.Column="0" Content="Drop Configurations" VerticalAlignment="Bottom" />
         <Label Grid.Row="1" Grid.Column="1" Content="Decription" VerticalAlignment="Bottom" />
         <ListBox Grid.Row="2" Grid.Column="0" Margin="5"
                  x:Name="DropConfigs"
                  ItemsSource="{Binding DropConfigs}"
-                 DisplayMemberPath="Name"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Margin="5" IsReadOnly="True"
+                 DisplayMemberPath="Name"
+                 IsSynchronizedWithCurrentItem="True"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="5" AcceptsReturn="True" IsReadOnly="True"
                  Text="{Binding ElementName=DropConfigs, Path=SelectedItem.Description}"/>
 
     </Grid>
